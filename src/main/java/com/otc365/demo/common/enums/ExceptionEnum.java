@@ -1,4 +1,4 @@
-package com.java.common.enums;
+package com.otc365.demo.common.enums;
 
 /**
  * Created by peter on 2019/7/8.

@@ -1,6 +1,5 @@
-package com.java.domain.vo;
+package com.otc365.demo.domain.vo;
 
-import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +20,6 @@ public class GetOrderInfoVO implements Serializable {
 
     public interface GetOrderInfo { }
 
-    @ApiModelProperty(value = "商户订单号")
     @NotBlank(message = "商户订单号不能为空", groups = {GetOrderInfo.class})
     private String companyOrderNum;
 
