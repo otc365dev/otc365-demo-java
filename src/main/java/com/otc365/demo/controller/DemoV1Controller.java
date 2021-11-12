@@ -4,6 +4,7 @@ import com.otc365.demo.common.constant.Consts;
 import com.otc365.demo.domain.vo.GetOrderInfoVO;
 import com.otc365.demo.domain.vo.GetUserOrderInfoVO;
 import com.otc365.sdk.ApiV1;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.annotation.Validated;
@@ -15,6 +16,7 @@ import com.otc365.sdk.util.Utils;
 
 @RestController
 @RequestMapping("/v1")
+@Slf4j
 public class DemoV1Controller {
 
     private  static Logger logger = LoggerFactory.getLogger(DemoV1Controller.class);
@@ -48,8 +50,6 @@ public class DemoV1Controller {
         ApiV1 apiV1 = new ApiV1(Consts.AppConfig.APP_SECRET);
         return apiV1.call(Consts.AppConfig.URL+"/cola/order/common/getOrderInfo",params);
 
-
-
     }
 
     @GetMapping("/buyOrder")
@@ -73,8 +73,8 @@ public class DemoV1Controller {
         params.put("orderTime",System.currentTimeMillis());
         params.put("orderType",1);
         params.put("signType",1);
-        params.put("syncUrl","https://demo.otc365test.com");
-        params.put("asyncUrl","https://demo.otc365test.com");
+        params.put("syncUrl","http://127.0.0.1:8088");
+        params.put("asyncUrl","http://127.0.0.1:8088/v1/callback");
 
         ApiV1 apiV1 = new ApiV1(Consts.AppConfig.APP_SECRET);
 
@@ -87,7 +87,7 @@ public class DemoV1Controller {
     public String sellOrder() throws Exception{
         Map<String, Object> params = new HashMap<>();
         params.put("areaCode", "86");
-        params.put("asyncUrl", "127.0.0.1:8090/v1/demo/return.php");
+        params.put("asyncUrl", "http://127.0.0.1:8088/v1/callback");
         params.put("total", "200");
         params.put("coinSign", "USDT");
         params.put("coinAmount", "20");
@@ -101,12 +101,42 @@ public class DemoV1Controller {
         params.put("orderType", "2");
         params.put("payCoinSign", "cny");
         params.put("phone", "18900000008");
-        params.put("syncUrl", "127.0.0.1:8090/v1/demo/return.php");
+        params.put("syncUrl", "http://127.0.0.1:8088");
         params.put("username", "范思哲");
         params.put("payCardNo", "99999999999999999999999");
 
         ApiV1 apiV1 = new ApiV1(Consts.AppConfig.APP_SECRET);
         return apiV1.call(Consts.AppConfig.URL+"/cola/order/addOrder",params);
 
+    }
+
+    @PostMapping("/callback")
+    public String callback(@RequestBody HashMap<String,String> body) throws Exception{
+
+        //通过HashMap<String,String> 接受回调参数，不会造成浮点数据精度问题，从而导致签名计算不正确问题
+        //或者通过Pojo 来接收回调参数，对应的浮点字段用 BigDecimal
+        String sign = body.get("sign");
+        body.remove("sign");
+        body.put("secretKey",Consts.AppConfig.APP_SECRET);
+        String baseString = Utils.createBaseString1(body);
+
+        Map<String,Object> resp = new HashMap<>();
+        resp.put("code",200);
+        resp.put("success",true);
+
+        String sign1;
+        if(sign.length() == 32) //md5 {
+        {
+            sign1 = Utils.md5(baseString);
+        }else{ //sha256
+            sign1 = Utils.HMACSHA256(baseString, Consts.AppConfig.APP_SECRET);
+        }
+        log.info("base={},sign={},sign1={}",baseString,sign,sign1);
+
+        if(!sign1.equals(sign) ){
+            resp.put("code",500);
+            resp.put("success",false);
+        }
+        return Utils.mapper.writeValueAsString(resp);
     }
 }

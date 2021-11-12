@@ -59,6 +59,22 @@ public class Utils {
         return baseString;
     }
 
+    public static String createBaseString1(Map<String, String> params) {
+        List<String> keys = new ArrayList<String>(params.keySet());
+        Collections.sort(keys);
+        String baseString = "";
+        for (int i = 0; i < keys.size(); i++) {
+            String key = keys.get(i);
+            String value = params.get(key);
+            if (i == keys.size() - 1) {
+                baseString = baseString + key + "=" + value;
+            } else {
+                baseString = baseString + key + "=" + value + "&";
+            }
+        }
+        return baseString;
+    }
+
     public static String md5(String buffer) throws Exception {
 
         char[] hexDigest = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
