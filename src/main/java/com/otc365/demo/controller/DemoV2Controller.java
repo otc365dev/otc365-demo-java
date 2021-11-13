@@ -77,7 +77,6 @@ public class DemoV2Controller {
         params.put("companyId","12511234561");
         params.put("orderTime",System.currentTimeMillis());
         params.put("orderType",1); //buy order
-        params.put("signType",1);
         params.put("syncUrl","http://127.0.0.1:8088");
         params.put("asyncUrl","http://127.0.0.1:8088/v2/callback");
 
@@ -104,7 +103,6 @@ public class DemoV2Controller {
         params.put("orderPayChannel", "3");
         params.put("orderTime",System.currentTimeMillis());
         params.put("orderType", "2"); //sell order
-        params.put("signType",1);
         params.put("payCoinSign", "cny");
         params.put("phone", "18900000007");
         params.put("syncUrl", "http://127.0.0.1:8088");
