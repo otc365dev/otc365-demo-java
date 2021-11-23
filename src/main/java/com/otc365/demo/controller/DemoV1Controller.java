@@ -110,6 +110,24 @@ public class DemoV1Controller {
 
     }
 
+    @PostMapping("/getBaseString")
+    public String getBaseString(@RequestBody HashMap<String,String> body) throws Exception{
+
+        body.remove("sign");
+        body.put("secretKey",Consts.AppConfig.APP_SECRET);
+        String baseString = Utils.createBaseString1(body);
+
+        Map<String,Object> resp = new HashMap<>();
+        resp.put("code",200);
+        resp.put("success",true);
+
+        log.info("base={}",baseString);
+
+        resp.put("data",baseString);
+
+        return Utils.mapper.writeValueAsString(resp);
+    }
+
     @PostMapping("/callback")
     public String callback(@RequestBody HashMap<String,String> body) throws Exception{
 
