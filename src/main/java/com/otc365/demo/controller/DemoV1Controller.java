@@ -110,11 +110,11 @@ public class DemoV1Controller {
 
     }
 
-    @PostMapping("/getBaseString")
-    public String getBaseString(@RequestBody HashMap<String,String> body) throws Exception{
+    @PostMapping("/getSign")
+    public String getSign(@RequestBody HashMap<String,String> body,@RequestParam  String secretKey,@RequestParam Integer signType) throws Exception{
 
         body.remove("sign");
-        body.put("secretKey",Consts.AppConfig.APP_SECRET);
+        body.put("secretKey",secretKey);
         String baseString = Utils.createBaseString1(body);
 
         Map<String,Object> resp = new HashMap<>();
@@ -122,9 +122,15 @@ public class DemoV1Controller {
         resp.put("success",true);
 
         log.info("base={}",baseString);
+        resp.put("baseString",baseString);
 
-        resp.put("data",baseString);
-
+        if(signType == 1){
+            String sign = Utils.HMACSHA256(baseString,secretKey);
+            resp.put("sign",sign);
+        }else{
+            String sign = Utils.md5(baseString);
+            resp.put("sign",sign);
+        }
         return Utils.mapper.writeValueAsString(resp);
     }
 
