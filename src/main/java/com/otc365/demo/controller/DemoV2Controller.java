@@ -57,8 +57,8 @@ public class DemoV2Controller {
 
     }
 
-    @GetMapping("/buyOrder")
-    public String buyOrder() throws Exception{
+    @GetMapping("/addBuyOrder")
+    public String addBuyOrder() throws Exception{
 
         Map<String,Object> params = new HashMap<>();
 
@@ -86,9 +86,8 @@ public class DemoV2Controller {
 
     }
 
-
-    @GetMapping("/sellOrder")
-    public String sellOrder() throws Exception{
+    @GetMapping("/addSellOrder")
+    public String addSellOrder() throws Exception{
         Map<String, Object> params = new HashMap<>();
         params.put("areaCode", "86");
         params.put("asyncUrl", "http://127.0.0.1:8088/v2/callback");
@@ -112,6 +111,23 @@ public class DemoV2Controller {
         ApiV2 apiV2 = new ApiV2(Consts.AppConfig.APP_PRIVATE_KEY);
 
         return apiV2.call(Consts.AppConfig.URL+"/cola/apiOpen/addOrder",params);
+
+    }
+
+    @GetMapping("/addIntentOrder")
+    public String addIntentOrder() throws Exception{
+        Map<String, Object> params = new HashMap<>();
+        params.put("areaCode", "86");
+        params.put("asyncUrl", "http://127.0.0.1:8088/v2/callback");
+        params.put("coinQuantity", "20");
+        params.put("companyId", Consts.AppConfig.APP_KEY);
+        params.put("companyOrderNum", UUID.randomUUID().toString());//商户自定义订单号
+        params.put("phone", "18900000007");
+        params.put("syncUrl", "http://127.0.0.1:8088");
+
+        ApiV2 apiV2 = new ApiV2(Consts.AppConfig.APP_PRIVATE_KEY);
+
+        return apiV2.call(Consts.AppConfig.URL+"/cola/apiOpen/addIntentOrder",params);
 
     }
 
