@@ -1,12 +1,5 @@
 package com.otc365.demo.common.constant;
 
-/**
- * @Description: Http 常量
- * @Author: peter
- * @Version: 1.0
- * @Date: 2020/7/5 18:43
- * @Modify
- */
 public interface Consts {
 
     interface AppConfig{

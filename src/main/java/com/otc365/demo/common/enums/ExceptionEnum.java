@@ -1,10 +1,5 @@
 package com.otc365.demo.common.enums;
 
-/**
- * Created by peter on 2019/7/8.
- * 异常枚举
- * 便于维护
- */
 public enum ExceptionEnum {
     //系统异常
     SUCCESS(200, "成功"),
