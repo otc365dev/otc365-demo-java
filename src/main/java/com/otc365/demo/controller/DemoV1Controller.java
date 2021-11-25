@@ -14,6 +14,10 @@ import java.util.Map;
 import java.util.UUID;
 import com.otc365.sdk.util.Utils;
 
+/**
+ * v1 版本使用的是对称签名，支持md5,sha256 通过参数signType 来区分，signType 0或者不传用的md5 签名，1为hmac_sha256 方式签名
+ * v1 版本后续逐渐会废弃，有些接口已经不支持v1
+ */
 @RestController
 @RequestMapping("/v1")
 @Slf4j

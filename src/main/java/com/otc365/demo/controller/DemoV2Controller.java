@@ -17,6 +17,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * v2 版本使用的是非对称签名，商户端自己持有私钥，平台持有对应的公钥 签名方法为 SHA256withRSA
+ * v2 版本的回调签名验证，需要用平台给的公钥验证签名
+ */
 @RestController
 @RequestMapping("/v2")
 @Slf4j
