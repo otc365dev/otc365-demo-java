@@ -128,6 +128,23 @@ public class Utils {
         return verifySignSuccess;
     }
 
+
+    public static Map<String, String> initKey() throws Exception {
+        KeyPairGenerator keygen = KeyPairGenerator.getInstance("RSA");
+        SecureRandom secrand = new SecureRandom();
+        secrand.setSeed("initSeed".getBytes());
+        keygen.initialize(1024, secrand);
+        KeyPair keys = keygen.genKeyPair();
+        byte[] pub_key = keys.getPublic().getEncoded();
+        String publicKeyString = Base64.encodeBase64String(pub_key);
+        byte[] pri_key = keys.getPrivate().getEncoded();
+        String privateKeyString = Base64.encodeBase64String(pri_key);
+        Map<String, String> keyPairMap = new HashMap();
+        keyPairMap.put("publicKey", publicKeyString);
+        keyPairMap.put("privateKey", privateKeyString);
+        return keyPairMap;
+    }
+
     public static String httpPost(String url,Map<String, Object> params) throws Exception{
 
         CloseableHttpClient client = HttpClients.createDefault();

@@ -156,4 +156,9 @@ public class DemoV2Controller {
         }
         return Utils.mapper.writeValueAsString(resp);
     }
+
+    @GetMapping("/genKey")
+    public String genKey() throws Exception{
+        return Utils.mapper.writeValueAsString(Utils.initKey());
+    }
 }
