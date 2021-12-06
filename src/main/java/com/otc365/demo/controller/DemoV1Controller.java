@@ -138,6 +138,33 @@ public class DemoV1Controller {
         return Utils.mapper.writeValueAsString(resp);
     }
 
+    @PostMapping("/verifySign")
+    public String verifySign(@RequestBody HashMap<String,String> body,@RequestParam  String secretKey,@RequestParam Integer signType) throws Exception{
+
+        String sign = body.get("sign");
+        body.remove("sign");
+        body.put("secretKey",secretKey);
+        String baseString = Utils.createBaseString1(body);
+
+        Map<String,Object> resp = new HashMap<>();
+        resp.put("code",200);
+        resp.put("success",true);
+
+        String sign1;
+        if(signType == 0) { //md5
+            sign1 = Utils.md5(baseString);
+        }else{ //sha256
+            sign1 = Utils.HMACSHA256(baseString, Consts.AppConfig.APP_SECRET);
+        }
+        log.info("base={},sign={},sign1={}",baseString,sign,sign1);
+
+        if(!sign1.equals(sign) ){
+            resp.put("code",500);
+            resp.put("success",false);
+        }
+        return Utils.mapper.writeValueAsString(resp);
+    }
+
     @PostMapping("/callback")
     public String callback(@RequestBody HashMap<String,String> body) throws Exception{
 

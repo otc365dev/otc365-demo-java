@@ -135,6 +135,47 @@ public class DemoV2Controller {
 
     }
 
+
+    @PostMapping("/getSign")
+    public String getSign(@RequestBody HashMap<String,String> body,@RequestParam  String privateKey) throws Exception{
+
+        body.remove("sign");
+        String baseString = Utils.createBaseString1(body);
+
+        Map<String,Object> resp = new HashMap<>();
+        resp.put("code",200);
+        resp.put("success",true);
+
+        log.info("base={}",baseString);
+        resp.put("baseString",baseString);
+
+        String sign = Utils.signRSA(baseString,privateKey);
+        resp.put("sign",sign);
+
+        return Utils.mapper.writeValueAsString(resp);
+    }
+
+    @PostMapping("/verifySign")
+    public String verifySign(@RequestBody HashMap<String,String> body,@RequestParam  String publicKey) throws Exception{
+
+        String sign = body.get("sign");
+        body.remove("sign");
+        String baseString = Utils.createBaseString1(body);
+
+        Map<String,Object> resp = new HashMap<>();
+        resp.put("code",200);
+        resp.put("success",true);
+
+        boolean flag = Utils.verifyRSA(baseString,sign,publicKey);
+        log.info("base={},sign={},flag={}",baseString,sign,flag);
+
+        if(!flag){
+            resp.put("code",500);
+            resp.put("success", flag);
+        }
+        return Utils.mapper.writeValueAsString(resp);
+    }
+
     @PostMapping("/callback")
     public String callback(@RequestBody HashMap<String,String> body) throws Exception{
         //通过HashMap<String,String> 接受回调参数，不会造成浮点数据精度问题，从而导致签名计算不正确问题
