@@ -1,5 +1,6 @@
 package com.otc365.sdk.util;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
@@ -50,6 +51,9 @@ public class Utils {
         for (int i = 0; i < keys.size(); i++) {
             String key = keys.get(i);
             Object value = params.get(key);
+            if (ObjectUtil.isEmpty(value)){
+                continue;
+            }
             if (i == keys.size() - 1) {
                 baseString = baseString + key + "=" + value;
             } else {
@@ -66,6 +70,9 @@ public class Utils {
         for (int i = 0; i < keys.size(); i++) {
             String key = keys.get(i);
             String value = params.get(key);
+            if (ObjectUtil.isEmpty(value)){
+                continue;
+            }
             if (i == keys.size() - 1) {
                 baseString = baseString + key + "=" + value;
             } else {
