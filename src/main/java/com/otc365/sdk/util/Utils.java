@@ -44,16 +44,25 @@ public class Utils {
         return sb.toString();
     }
 
+    public static void removeNull(Map<String, Object> params){
+
+        Iterator<Map.Entry<String, Object>> it = params.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, Object> entry = it.next();
+            if (ObjectUtil.isEmpty(entry.getValue())){
+                it.remove();
+            }
+        }
+    }
+
     public static String createBaseString(Map<String, Object> params) {
+        removeNull(params);
         List<String> keys = new ArrayList<String>(params.keySet());
         Collections.sort(keys);
         String baseString = "";
         for (int i = 0; i < keys.size(); i++) {
             String key = keys.get(i);
             Object value = params.get(key);
-            if (ObjectUtil.isEmpty(value)){
-                continue;
-            }
             if (i == keys.size() - 1) {
                 baseString = baseString + key + "=" + value;
             } else {
@@ -63,16 +72,25 @@ public class Utils {
         return baseString;
     }
 
+    public static void removeNull1(Map<String, String> params){
+
+        Iterator<Map.Entry<String, String>> it = params.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, String> entry = it.next();
+            if (ObjectUtil.isEmpty(entry.getValue())){
+                it.remove();
+            }
+        }
+    }
+
     public static String createBaseString1(Map<String, String> params) {
+        removeNull1(params);
         List<String> keys = new ArrayList<String>(params.keySet());
         Collections.sort(keys);
         String baseString = "";
         for (int i = 0; i < keys.size(); i++) {
             String key = keys.get(i);
             String value = params.get(key);
-            if (ObjectUtil.isEmpty(value)){
-                continue;
-            }
             if (i == keys.size() - 1) {
                 baseString = baseString + key + "=" + value;
             } else {
